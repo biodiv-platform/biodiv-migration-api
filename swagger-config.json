@@ -1,0 +1,14 @@
+{
+	"modelPackage": "com.strandls.migration.pojo",
+	"apiPackage": "com.strandls.migration.controller",
+	"invokerPackage": "com.strandls.migration",
+	"groupId": "com.strandls.biodiv",
+	"artifactId": "migration-client",
+	"artifactVersion": "1.0.0-SNAPSHOT",
+	"fullJavaUtil": true,
+	"dateLibrary": "legacy",
+	"library": "jersey1",
+	"developerName": "Abhishek Kumar Rudra",
+	"developerEmail": "abhishek.rudra@strandls.com",
+	"java8": true
+}
