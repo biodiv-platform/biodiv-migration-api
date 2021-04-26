@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContextEvent;
 
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Scopes;
 import com.google.inject.servlet.GuiceServletContextListener;
-import com.strandls.authentication_utility.filter.FilterModule;
+import com.google.inject.servlet.ServletModule;
 import com.strandls.migration.controller.ActivityControllerModule;
 import com.strandls.migration.dao.ActivityDaoModule;
 import com.strandls.migration.service.impl.ActivityServiceModule;
@@ -42,8 +43,6 @@ import com.strandls.traits.controller.TraitsServiceApi;
 import com.strandls.user.controller.UserServiceApi;
 import com.strandls.userGroup.controller.UserGroupSerivceApi;
 import com.strandls.utility.controller.UtilityServiceApi;
-import com.sun.jersey.guice.JerseyServletModule;
-import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
 /**
  * @author Abhishek Rudra
@@ -56,7 +55,7 @@ public class MigrationServeletContextListener extends GuiceServletContextListene
 	@Override
 	protected Injector getInjector() {
 
-		Injector injector = Guice.createInjector(new JerseyServletModule() {
+		Injector injector = Guice.createInjector(new ServletModule() {
 			@Override
 			protected void configureServlets() {
 
@@ -76,6 +75,7 @@ public class MigrationServeletContextListener extends GuiceServletContextListene
 
 				Map<String, String> props = new HashMap<String, String>();
 				props.put("javax.ws.rs.Application", ApplicationConfig.class.getName());
+				props.put("jersey.config.server.provider.packages", "com");
 				props.put("jersey.config.server.wadl.disableWadl", "true");
 
 				ObjectMapper om = new ObjectMapper();
@@ -88,10 +88,11 @@ public class MigrationServeletContextListener extends GuiceServletContextListene
 				bind(UserServiceApi.class).in(Scopes.SINGLETON);
 				bind(RecommendationServicesApi.class).in(Scopes.SINGLETON);
 				bind(ObservationServiceApi.class).in(Scopes.SINGLETON);
-				serve("/api/*").with(GuiceContainer.class, props);
-				filter("/*").through(SwaggerFilter.class);
+				bind(ServletContainer.class).in(Scopes.SINGLETON);
+
+				serve("/api/*").with(ServletContainer.class, props);
 			}
-		}, new ActivityControllerModule(), new FilterModule(), new ActivityServiceModule(), new ActivityDaoModule());
+		}, new ActivityControllerModule(), new ActivityServiceModule(), new ActivityDaoModule());
 
 		return injector;
 

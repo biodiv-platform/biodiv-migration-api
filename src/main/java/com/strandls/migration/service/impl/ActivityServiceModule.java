@@ -17,6 +17,7 @@ public class ActivityServiceModule extends AbstractModule {
 	protected void configure() {
 		bind(ActivityService.class).to(ActivityServiceImpl.class).in(Scopes.SINGLETON);
 		bind(MigrateThread.class).in(Scopes.SINGLETON);
+		bind(SpeciesMigrateThread.class).in(Scopes.SINGLETON);
 	}
 
 }

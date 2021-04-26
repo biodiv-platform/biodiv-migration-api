@@ -13,11 +13,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.google.inject.Inject;
+
+import javax.inject.Inject;
 import com.strandls.migration.ApiConstants;
 import com.strandls.migration.dao.ActivityDao;
 import com.strandls.migration.pojo.Activity;
 import com.strandls.migration.service.impl.MigrateThread;
+import com.strandls.migration.service.impl.SpeciesMigrateThread;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +37,9 @@ public class ActivityController {
 
 	@Inject
 	private MigrateThread migrationThread;
+
+	@Inject
+	private SpeciesMigrateThread speciesMigration;
 
 	@Inject
 	private ActivityDao activityDao;
@@ -79,6 +84,20 @@ public class ActivityController {
 			return Response.status(Status.OK).entity("Migration Started").build();
 		} catch (Exception e) {
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+	}
+
+	@POST
+	@Path(ApiConstants.MIGRATE + ApiConstants.SPECIES)
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public Response migrateSpecies() {
+		try {
+			Thread thread = new Thread(speciesMigration);
+			thread.start();
+			return Response.status(Status.OK).entity("migration started").build();
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).build();
 		}
 	}
 

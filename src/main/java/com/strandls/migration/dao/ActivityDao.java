@@ -11,8 +11,7 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.strandls.migration.pojo.Activity;
+import javax.inject.Inject;import com.strandls.migration.pojo.Activity;
 import com.strandls.migration.util.AbstractDAO;
 
 /**
@@ -85,7 +84,7 @@ public class ActivityDao extends AbstractDAO<Activity, Long> {
 		return commentCount;
 	}
 
-	public List<Activity> findAllObservationActivity(String type, Integer startPosition) {
+	public List<Activity> findAllActivityByPosition(String type, Integer startPosition) {
 		Session session = sessionFactory.openSession();
 		String qry = "from Activity where rootHolderType = :type order by id";
 		List<Activity> result = null;
