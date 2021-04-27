@@ -20,4 +20,7 @@ public class ApiConstants {
 	public static final String COMMENT = "/comment";
 	public static final String ADD = "/add";
 	public static final String MIGRATE = "/migrate";
+	public static final String SPECIES = "/species";
+	public static final String CUSTOMFIELD = "/customField";
+	public static final String OBSERVATION = "/observation";
 }

@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.strandls.migration.ActivityEnums;
 import com.strandls.migration.dao.ActivityDao;
 import com.strandls.migration.pojo.Activity;
@@ -99,7 +99,7 @@ public class ActivityServiceImpl implements ActivityService {
 	}
 
 	@Override
-	public void migrateData() {
+	public void observationActivityMigration() {
 		try {
 
 			InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
@@ -121,7 +121,7 @@ public class ActivityServiceImpl implements ActivityService {
 			Integer totalActvities = 0;
 
 			while (nextBatch) {
-				List<Activity> activities = activityDao.findAllObservationActivity(ActivityEnums.observation.getValue(),
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.observation.getValue(),
 						startPosition);
 				totalActvities += activities.size();
 				if (activities.size() == 50000)
@@ -135,7 +135,7 @@ public class ActivityServiceImpl implements ActivityService {
 			Integer total = 0;
 			int count = 0;
 			while (nextBatch) {
-				List<Activity> activities = activityDao.findAllObservationActivity(ActivityEnums.observation.getValue(),
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.observation.getValue(),
 						startPosition);
 				total += activities.size();
 				if (activities.size() == 50000)
@@ -293,6 +293,109 @@ public class ActivityServiceImpl implements ActivityService {
 			}
 			System.out.println("Migration Completed Successfully");
 
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+	}
+
+	List<String> nullSpeciesActivityList = new ArrayList<String>(Arrays.asList("Created species", "Added synonym",
+			"Updated synonym", "Deleted synonym", "Added common name", "Updated common name", "Deleted common name"));
+
+	List<String> speciesActivityList = new ArrayList<String>(
+			Arrays.asList("Featured", "UnFeatured", "Updated species gallery"));
+
+	List<String> speciesFieldSpeciesActivityList = new ArrayList<String>(
+			Arrays.asList("Added species field", "Updated species field", "Deleted species field"));
+
+	List<String> taxonomySpeciesActivityList = new ArrayList<String>(
+			Arrays.asList("Added hierarchy", "Deleted hierarchy"));
+
+	@Override
+	public void speciesActivityMigration() {
+		try {
+
+			InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
+
+			Properties properties = new Properties();
+			try {
+				properties.load(in);
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+			}
+			String portalName = properties.getProperty("portalName");
+			String portalWebAddress = properties.getProperty("portalAddress");
+			in.close();
+
+			System.out.println("portal Name :" + portalName);
+			System.out.println("portal webAddress :" + portalWebAddress);
+
+//			getting total count of activities			
+			Integer startPosition = 0;
+			Boolean nextBatch = true;
+			Integer totalActvities = 0;
+
+			while (nextBatch) {
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.species.getValue(),
+						startPosition);
+				totalActvities += activities.size();
+				if (activities.size() == 50000)
+					startPosition = totalActvities + 1;
+				else
+					nextBatch = false;
+			}
+			nextBatch = true;
+
+//			migration code here
+
+			startPosition = 0;
+			Integer total = 0;
+			int count = 0;
+			while (nextBatch) {
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.species.getValue(),
+						startPosition);
+				total += activities.size();
+				if (activities.size() == 50000)
+					startPosition = total + 1;
+				else
+					nextBatch = false;
+
+				String description = "";
+				for (Activity activity : activities) {
+					description = "";
+
+					System.out.println("==========================BEGIN=======================");
+
+					System.out.println("Activity id :" + activity.getId() + " activity description :"
+							+ activity.getActivityDescription() + " activity Type:" + activity.getActivityType());
+
+					if (traitsActivityList.contains(activity.getActivityType())) {
+						if (activity.getActivityDescription().trim().length() == 0) {
+							FactValuePair fact = traitsService.getFactIbp(activity.getActivityHolderId().toString());
+							description = fact.getName() + ":" + fact.getValue();
+							System.out.println("New facts description : " + description);
+						}
+
+					} else if (userGroupActivityList.contains(activity.getActivityType())) {
+						if (!(activity.getActivityHolderId().equals(activity.getRootHolderId()))) {
+							UserGroupIbp userGroup = userGroupService
+									.getIbpData(activity.getActivityHolderId().toString());
+
+							String activityDesc = activity.getActivityDescription();
+							String feature = null;
+							if (!(activityDesc.equalsIgnoreCase("Posted observation to group")
+									|| activityDesc.equals("Removed observation from group")))
+								feature = activityDesc;
+							UserGroupActivity ugActivity = new UserGroupActivity(userGroup.getId(), userGroup.getName(),
+									userGroup.getWebAddress(), feature);
+
+							description = objectMapper.writeValueAsString(ugActivity);
+
+							System.out.println("UserGroup description :" + description);
+						}
+					}
+				}
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
