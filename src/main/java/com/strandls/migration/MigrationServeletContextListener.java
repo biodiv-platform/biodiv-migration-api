@@ -34,9 +34,9 @@ import com.google.inject.Injector;
 import com.google.inject.Scopes;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
-import com.strandls.migration.controller.ActivityControllerModule;
-import com.strandls.migration.dao.ActivityDaoModule;
-import com.strandls.migration.service.impl.ActivityServiceModule;
+import com.strandls.migration.controller.MigrationControllerModule;
+import com.strandls.migration.dao.MigrationDaoModule;
+import com.strandls.migration.service.impl.MigrationServiceModule;
 import com.strandls.observation.controller.ObservationServiceApi;
 import com.strandls.observation.controller.RecommendationServicesApi;
 import com.strandls.traits.controller.TraitsServiceApi;
@@ -88,11 +88,11 @@ public class MigrationServeletContextListener extends GuiceServletContextListene
 				bind(UserServiceApi.class).in(Scopes.SINGLETON);
 				bind(RecommendationServicesApi.class).in(Scopes.SINGLETON);
 				bind(ObservationServiceApi.class).in(Scopes.SINGLETON);
+				
 				bind(ServletContainer.class).in(Scopes.SINGLETON);
-
 				serve("/api/*").with(ServletContainer.class, props);
 			}
-		}, new ActivityControllerModule(), new ActivityServiceModule(), new ActivityDaoModule());
+		}, new MigrationControllerModule(), new MigrationServiceModule(), new MigrationDaoModule());
 
 		return injector;
 

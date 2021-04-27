@@ -19,7 +19,7 @@ public class SpeciesMigrateThread implements Runnable {
 
 	@Override
 	public void run() {
-		service.speciesMigration();
+		service.speciesActivityMigration();
 
 	}
 

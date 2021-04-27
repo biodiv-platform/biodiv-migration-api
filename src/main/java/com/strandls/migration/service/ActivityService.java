@@ -9,8 +9,8 @@ package com.strandls.migration.service;
  */
 public interface ActivityService {
 
-	public void migrateData();
+	public void observationActivityMigration();
 
-	public void speciesMigration();
+	public void speciesActivityMigration();
 
 }

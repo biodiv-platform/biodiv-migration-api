@@ -10,11 +10,11 @@ import com.google.inject.Scopes;
  * @author Abhishek Rudra
  *
  */
-public class ActivityControllerModule extends AbstractModule {
+public class MigrationControllerModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(ActivityController.class).in(Scopes.SINGLETON);
+		bind(MigrationController.class).in(Scopes.SINGLETON);
 
 	}
 }

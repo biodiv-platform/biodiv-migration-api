@@ -99,7 +99,7 @@ public class ActivityServiceImpl implements ActivityService {
 	}
 
 	@Override
-	public void migrateData() {
+	public void observationActivityMigration() {
 		try {
 
 			InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
@@ -312,7 +312,7 @@ public class ActivityServiceImpl implements ActivityService {
 			Arrays.asList("Added hierarchy", "Deleted hierarchy"));
 
 	@Override
-	public void speciesMigration() {
+	public void speciesActivityMigration() {
 		try {
 
 			InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
@@ -393,13 +393,9 @@ public class ActivityServiceImpl implements ActivityService {
 
 							System.out.println("UserGroup description :" + description);
 						}
-
 					}
-
 				}
-
 			}
-
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
