@@ -21,5 +21,7 @@ public class MigrationDaoModule extends AbstractModule {
 		bind(UserGroupCustomFieldMappingDao.class).in(Scopes.SINGLETON);
 		bind(ObservationCustomFieldDao.class).in(Scopes.SINGLETON);
 		bind(UserGroupDao.class).in(Scopes.SINGLETON);
+		bind(CustomFieldUG18Dao.class).in(Scopes.SINGLETON);
+		bind(CustomFieldUG37Dao.class).in(Scopes.SINGLETON);
 	}
 }
