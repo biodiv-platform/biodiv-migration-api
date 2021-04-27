@@ -15,13 +15,14 @@ import org.slf4j.LoggerFactory;
 import com.strandls.migration.dao.CustomFieldDao;
 import com.strandls.migration.dao.CustomFieldValuesDao;
 import com.strandls.migration.dao.CustomFieldsDao;
+import com.strandls.migration.dao.ObservationCustomFieldDao;
 import com.strandls.migration.dao.UserGroupCustomFieldMappingDao;
+import com.strandls.migration.dao.UserGroupDao;
 import com.strandls.migration.pojo.CustomField;
 import com.strandls.migration.pojo.CustomFieldValues;
 import com.strandls.migration.pojo.CustomFields;
 import com.strandls.migration.pojo.UserGroupCustomFieldMapping;
 import com.strandls.migration.service.CustomFieldService;
-
 
 /**
  * @author Abhishek Rudra
@@ -33,23 +34,27 @@ public class CustomFieldServiceImpl implements CustomFieldService {
 	private final Logger logger = LoggerFactory.getLogger(CustomFieldServiceImpl.class);
 
 //	permanent code
-	
+
 	@Inject
 	private CustomFieldDao cfDao;
 
 	@Inject
 	private CustomFieldsDao cfsDao;
-	
+
 	@Inject
 	private CustomFieldValuesDao cfValueDao;
-	
+
 	@Inject
 	private UserGroupCustomFieldMappingDao ugCFMappingDao;
-	
+
+	@Inject
+	private UserGroupDao userGroupDao;
+
+	@Inject
+	private ObservationCustomFieldDao observationCFDao;
+
 //	temporary Code
 //	write platform specific code here
-	
-	
 
 	@Override
 	public void migrateCustomField() {
@@ -113,7 +118,7 @@ public class CustomFieldServiceImpl implements CustomFieldService {
 		}
 
 	}
-	
+
 	private void observationCustomFieldDataMigration(Map<Long, Long> preciousToNew) {
 //		write platform specific code here
 	}
