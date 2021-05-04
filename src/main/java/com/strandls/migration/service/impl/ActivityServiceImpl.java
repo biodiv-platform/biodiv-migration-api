@@ -110,8 +110,8 @@ public class ActivityServiceImpl implements ActivityService {
 			} catch (IOException e) {
 				logger.error(e.getMessage());
 			}
-			String portalName = properties.getProperty("portalName");
-			String portalWebAddress = properties.getProperty("portalAddress");
+			String portalName = properties.getProperty("siteName");
+			String portalWebAddress = properties.getProperty("serverUrl");
 			in.close();
 
 			System.out.println("portal Name :" + portalName);
@@ -323,8 +323,8 @@ public class ActivityServiceImpl implements ActivityService {
 			} catch (IOException e) {
 				logger.error(e.getMessage());
 			}
-			String portalName = properties.getProperty("portalName");
-			String portalWebAddress = properties.getProperty("portalAddress");
+			String portalName = properties.getProperty("siteName");
+			String portalWebAddress = properties.getProperty("serverUrl");
 			in.close();
 
 			System.out.println("portal Name :" + portalName);
