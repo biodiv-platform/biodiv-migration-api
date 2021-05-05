@@ -144,6 +144,7 @@ public class CustomFieldServiceImpl implements CustomFieldService {
 				if (cf501183Data.getCf501526() != null && !cf501183Data.getCf501526().trim().isEmpty()) {
 					observationCF = new ObservationCustomField(null, authorId, cf501183Data.getObservationId(), 501183L,
 							previousToNew.get(501526L), null, date, date, cf501183Data.getCf501526(), null, null);
+					observationCFDao.save(observationCF);
 				}
 
 			}
