@@ -43,6 +43,8 @@ import com.strandls.traits.controller.TraitsServiceApi;
 import com.strandls.user.controller.UserServiceApi;
 import com.strandls.userGroup.controller.UserGroupSerivceApi;
 import com.strandls.utility.controller.UtilityServiceApi;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.PrecisionModel;
 
 /**
  * @author Abhishek Rudra
@@ -78,6 +80,9 @@ public class MigrationServeletContextListener extends GuiceServletContextListene
 				props.put("jersey.config.server.provider.packages", "com");
 				props.put("jersey.config.server.wadl.disableWadl", "true");
 
+				GeometryFactory geofactory = new GeometryFactory(new PrecisionModel(), 4326);
+				bind(GeometryFactory.class).toInstance(geofactory);
+				
 				ObjectMapper om = new ObjectMapper();
 				bind(ObjectMapper.class).toInstance(om);
 

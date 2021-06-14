@@ -18,6 +18,8 @@ import com.strandls.migration.ApiConstants;
 import com.strandls.migration.dao.ActivityDao;
 import com.strandls.migration.pojo.Activity;
 import com.strandls.migration.service.CustomFieldService;
+import com.strandls.migration.service.DocumentService;
+import com.strandls.migration.service.impl.DocumentMigrationThread;
 import com.strandls.migration.service.impl.ObservationThread;
 import com.strandls.migration.service.impl.SpeciesMigrateThread;
 
@@ -42,10 +44,16 @@ public class MigrationController {
 	private SpeciesMigrateThread speciesMigration;
 
 	@Inject
+	private DocumentMigrationThread documentMigration;
+
+	@Inject
 	private ActivityDao activityDao;
 
 	@Inject
 	private CustomFieldService cfService;
+
+	@Inject
+	private DocumentService docService;
 
 	@GET
 	@Path(ApiConstants.PING)
@@ -114,6 +122,33 @@ public class MigrationController {
 			return Response.status(Status.OK).entity("started").build();
 		} catch (Exception e) {
 			return Response.status(Status.BAD_GATEWAY).entity(e.getMessage()).build();
+		}
+	}
+
+	@POST
+	@Path(ApiConstants.MIGRATE + ApiConstants.DOCUMENT)
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public Response migrateDocumentActivity() {
+		try {
+			Thread thread = new Thread(documentMigration);
+			thread.start();
+			return Response.status(Status.OK).entity("Migration started").build();
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+	}
+
+	@POST
+	@Path(ApiConstants.MIGRATE + ApiConstants.DOCCOVERAGE)
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public Response migrateDoucmentCoverage() {
+		try {
+			docService.migrateDataDocumentCoverage();
+			return Response.status(Status.OK).entity("Started").build();
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		}
 	}
 

@@ -13,4 +13,6 @@ public interface ActivityService {
 
 	public void speciesActivityMigration();
 
+	public void documentActivityMigration();
+
 }
