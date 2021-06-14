@@ -23,4 +23,6 @@ public class ApiConstants {
 	public static final String SPECIES = "/species";
 	public static final String CUSTOMFIELD = "/customField";
 	public static final String OBSERVATION = "/observation";
+	public static final String DOCUMENT = "/document";
+	public static final String DOCCOVERAGE = "/docCoverage";
 }

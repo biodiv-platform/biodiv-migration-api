@@ -12,11 +12,12 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.inject.Inject;
 import com.strandls.migration.ActivityEnums;
 import com.strandls.migration.dao.ActivityDao;
 import com.strandls.migration.pojo.Activity;
@@ -350,7 +351,7 @@ public class ActivityServiceImpl implements ActivityService {
 
 			startPosition = 0;
 			Integer total = 0;
-			int count = 0;
+//			int count = 0;
 			while (nextBatch) {
 				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.species.getValue(),
 						startPosition);
@@ -400,6 +401,144 @@ public class ActivityServiceImpl implements ActivityService {
 			logger.error(e.getMessage());
 		}
 
+	}
+
+	List<String> docNullActivityList = new ArrayList<String>(
+			Arrays.asList("Document created", "Document updated", "Document Deleted"));
+
+	List<String> docFlagActivityList = new ArrayList<String>(Arrays.asList("Flag removed", "Flagged"));
+
+	List<String> docUserGroupActivityList = new ArrayList<String>(
+			Arrays.asList("Featured", "Posted resource", "Removed resoruce", "UnFeatured"));
+
+	List<String> documentActivityList = new ArrayList<String>(
+			Arrays.asList("Document tag updated", "Featured", "UnFeatured"));
+
+	List<String> docCommentActivityList = new ArrayList<String>(Arrays.asList("Added a comment"));
+
+	@Override
+	public void documentActivityMigration() {
+		try {
+			InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
+
+			Properties properties = new Properties();
+			try {
+				properties.load(in);
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+			}
+			String portalName = properties.getProperty("portalName");
+			String portalWebAddress = properties.getProperty("portalAddress");
+			in.close();
+
+			System.out.println("portal Name :" + portalName);
+			System.out.println("portal webAddress :" + portalWebAddress);
+
+			Integer startPosition = 0;
+			Boolean nextBatch = true;
+			Integer totalActvities = 0;
+
+			while (nextBatch) {
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.document.getValue(),
+						startPosition);
+				totalActvities += activities.size();
+				if (activities.size() == 50000)
+					startPosition = totalActvities + 1;
+				else
+					nextBatch = false;
+			}
+			nextBatch = true;
+
+			startPosition = 0;
+			Integer total = 0;
+			int count = 0;
+
+			while (nextBatch) {
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.observation.getValue(),
+						startPosition);
+				total += activities.size();
+				if (activities.size() == 50000)
+					startPosition = total + 1;
+				else
+					nextBatch = false;
+
+				System.out.println("Total Number of Count :" + totalActvities);
+				String description = "";
+				for (Activity activity : activities) {
+
+					description = "";
+
+					if (activity.getId() == 3710993 || activity.getId() == 13782175)
+						continue;
+
+					System.out.println("==========================BEGIN=======================");
+
+					System.out.println("Activity id :" + activity.getId() + " activity description :"
+							+ activity.getActivityDescription() + " activity Type:" + activity.getActivityType());
+
+					if (docFlagActivityList.contains(activity.getActivityType())) {
+
+						FlagIbp flag = utilityService.getFlagsIbp(activity.getActivityHolderId().toString());
+						if (flag == null) {
+							description = activity.getDescriptionJson().getDescription();
+							String[] desc = description.split("\n");
+							flag = new FlagIbp();
+							flag.setFlag(desc[0]);
+							if (desc.length == 2)
+								flag.setNotes(desc[1]);
+						}
+						description = flag.getFlag() + ":" + flag.getNotes();
+						System.out.println("Flag Description :" + description);
+
+					} else if (docUserGroupActivityList.contains(activity.getActivityType())) {
+						if (!(activity.getActivityHolderId().equals(activity.getRootHolderId()))) {
+							UserGroupIbp userGroup = userGroupService
+									.getIbpData(activity.getActivityHolderId().toString());
+
+							String activityDesc = activity.getActivityDescription();
+							String feature = null;
+							if (!(activityDesc.equalsIgnoreCase("Posted document to group")
+									|| activityDesc.equals("Removed document from group")))
+								feature = activityDesc;
+							UserGroupActivity ugActivity = new UserGroupActivity(userGroup.getId(), userGroup.getName(),
+									userGroup.getWebAddress(), feature);
+
+							description = objectMapper.writeValueAsString(ugActivity);
+
+							System.out.println("UserGroup description :" + description);
+						}
+
+					} else if (activity.getActivityType().equalsIgnoreCase("UnFeatured")
+							|| activity.getActivityType().equalsIgnoreCase("Featured")) {
+
+						String activityDesc = activity.getActivityDescription();
+						String feature = null;
+						if (!(activityDesc.equalsIgnoreCase("Posted document to group")
+								|| activityDesc.equals("Removed document from group")))
+							feature = activityDesc;
+
+						UserGroupActivity ugActivity = new UserGroupActivity(null, portalName, portalWebAddress,
+								feature);
+
+						description = objectMapper.writeValueAsString(ugActivity);
+						System.out.println("Document Feature unfeature : " + description);
+					}
+
+//					update the activity
+
+					activity.setActivityDescription(description);
+					activityDao.update(activity);
+					count++;
+					System.out.println(
+							"Count :" + count + " out of " + totalActvities + "\t Activity Id :" + activity.getId());
+					System.out.println("==========================END========================");
+
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
 	}
 
 }
