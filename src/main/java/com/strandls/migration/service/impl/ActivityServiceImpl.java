@@ -454,7 +454,7 @@ public class ActivityServiceImpl implements ActivityService {
 			int count = 0;
 
 			while (nextBatch) {
-				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.observation.getValue(),
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.document.getValue(),
 						startPosition);
 				total += activities.size();
 				if (activities.size() == 50000)
