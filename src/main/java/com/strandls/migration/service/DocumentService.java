@@ -11,4 +11,6 @@ package com.strandls.migration.service;
 public interface DocumentService {
 
 	public void migrateDataDocumentCoverage();
+	
+	public void migraetDocumentType();
 }

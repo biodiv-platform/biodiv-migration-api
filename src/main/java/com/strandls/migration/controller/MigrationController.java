@@ -152,4 +152,17 @@ public class MigrationController {
 		}
 	}
 
+	@POST
+	@Path(ApiConstants.MIGRATE + ApiConstants.DOCITEMTYPE)
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public Response migrateDocItemType() {
+		try {
+			docService.migraetDocumentType();
+			return Response.status(Status.OK).entity("completed").build();
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+	}
+
 }
