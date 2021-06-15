@@ -48,6 +48,8 @@ public class Document implements Serializable {
 	private Date toDate;
 	private Geometry topology;
 	private Boolean isDeleted;
+	private String itemtype;
+	private String type;
 
 	/**
 	 * 
@@ -184,6 +186,24 @@ public class Document implements Serializable {
 
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	@Column(name = "item_type")
+	public String getItemtype() {
+		return itemtype;
+	}
+
+	public void setItemtype(String itemtype) {
+		this.itemtype = itemtype;
+	}
+
+	@Column(name = "type", columnDefinition = "TEXT")
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

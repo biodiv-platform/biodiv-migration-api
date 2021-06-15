@@ -5,7 +5,9 @@ package com.strandls.migration.service.impl;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -116,6 +118,29 @@ public class DocumentServiceImp implements DocumentService {
 		Geometry topology = geofactory.createPoint(c);
 		return topology;
 
+	}
+
+	@Override
+	public void migraetDocumentType() {
+		Map<String, String> typeMapping = new HashMap<String, String>();
+		typeMapping.put("Book","Book");
+		typeMapping.put("Presentation","Miscellaneous");
+		typeMapping.put("Technical_Report","Techreport");
+		typeMapping.put("Miscellaneous","Miscellaneous");
+		typeMapping.put("Report","Techreport");
+		typeMapping.put("Poster","Miscellaneous");
+		typeMapping.put("Journal_Article","Article");
+		typeMapping.put("Proposal","Unpublished");
+		
+		List<Document> documentList = documentDao.findAllDocument();
+		for(Document doc: documentList) {
+			doc.setItemtype(typeMapping.get(doc.getType()));
+			documentDao.update(doc);
+		}
+		
+		
+		
+		
 	}
 
 }

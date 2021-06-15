@@ -25,4 +25,5 @@ public class ApiConstants {
 	public static final String OBSERVATION = "/observation";
 	public static final String DOCUMENT = "/document";
 	public static final String DOCCOVERAGE = "/docCoverage";
+	public static final String DOCITEMTYPE = "/docItemType";
 }

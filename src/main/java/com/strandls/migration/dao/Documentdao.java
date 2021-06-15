@@ -42,6 +42,24 @@ public class Documentdao extends AbstractDAO<Document, Long> {
 	}
 
 	@SuppressWarnings("unchecked")
+	public List<Document> findAllDocument() {
+		String qry = "from Document where isDeleted = false";
+		Session session = sessionFactory.openSession();
+		List<Document> result = new ArrayList<Document>();
+
+		try {
+			Query<Document> query = session.createQuery(qry);
+			result = query.getResultList();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+			session.close();
+		}
+		return result;
+
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<Document> findAllwithCovergaeDocument() {
 		String qry = "from Document where isDeleted = false and coverageId is NOT NULL";
 		Session session = sessionFactory.openSession();
