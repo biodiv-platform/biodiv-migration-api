@@ -3,6 +3,7 @@
  */
 package com.strandls.migration.controller;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,12 +14,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import javax.inject.Inject;
 import com.strandls.migration.ApiConstants;
 import com.strandls.migration.dao.ActivityDao;
 import com.strandls.migration.pojo.Activity;
 import com.strandls.migration.service.CustomFieldService;
-import com.strandls.migration.service.DocumentService;
 import com.strandls.migration.service.impl.DocumentMigrationThread;
 import com.strandls.migration.service.impl.ObservationThread;
 import com.strandls.migration.service.impl.SpeciesMigrateThread;
@@ -51,9 +50,6 @@ public class MigrationController {
 
 	@Inject
 	private CustomFieldService cfService;
-
-	@Inject
-	private DocumentService docService;
 
 	@GET
 	@Path(ApiConstants.PING)
@@ -134,32 +130,6 @@ public class MigrationController {
 			Thread thread = new Thread(documentMigration);
 			thread.start();
 			return Response.status(Status.OK).entity("Migration started").build();
-		} catch (Exception e) {
-			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
-		}
-	}
-
-	@POST
-	@Path(ApiConstants.MIGRATE + ApiConstants.DOCCOVERAGE)
-	@Produces(MediaType.TEXT_PLAIN)
-
-	public Response migrateDoucmentCoverage() {
-		try {
-			docService.migrateDataDocumentCoverage();
-			return Response.status(Status.OK).entity("Started").build();
-		} catch (Exception e) {
-			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
-		}
-	}
-
-	@POST
-	@Path(ApiConstants.MIGRATE + ApiConstants.DOCITEMTYPE)
-	@Produces(MediaType.TEXT_PLAIN)
-
-	public Response migrateDocItemType() {
-		try {
-			docService.migraetDocumentType();
-			return Response.status(Status.OK).entity("completed").build();
 		} catch (Exception e) {
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		}
