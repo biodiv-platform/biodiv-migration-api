@@ -10,7 +10,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>biodiv-migration-api</name>
+	<name>biodiv-migration</name>
 	<url>https://github.com/strandls/biodiv-activity</url>
 
 	<properties>
