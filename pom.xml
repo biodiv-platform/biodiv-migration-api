@@ -30,6 +30,11 @@
 		<srcDir>src/main/webapp</srcDir>
 		<base-path>/migration-api/api</base-path>
 		<location>com.strandls.migration</location>
+
+		<!-- Sonar Cloud -->
+		<sonar.projectKey>strandls_biodiv-migration-api</sonar.projectKey>
+		<sonar.organization>strandls</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<distributionManagement>
