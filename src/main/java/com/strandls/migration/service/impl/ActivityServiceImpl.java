@@ -122,7 +122,7 @@ public class ActivityServiceImpl implements ActivityService {
 			Integer totalActvities = 0;
 
 			while (nextBatch) {
-				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.observation.getValue(),
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.OBSERVATION.getValue(),
 						startPosition);
 				totalActvities += activities.size();
 				if (activities.size() == 50000)
@@ -136,7 +136,7 @@ public class ActivityServiceImpl implements ActivityService {
 			Integer total = 0;
 			int count = 0;
 			while (nextBatch) {
-				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.observation.getValue(),
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.OBSERVATION.getValue(),
 						startPosition);
 				total += activities.size();
 				if (activities.size() == 50000)
@@ -197,7 +197,7 @@ public class ActivityServiceImpl implements ActivityService {
 						}
 
 					} else if (recommendationActivityList.contains(activity.getActivityType())
-							&& activity.getActivityHolderType().equals(ActivityEnums.recommendationVote.getValue())) {
+							&& activity.getActivityHolderType().equals(ActivityEnums.RECOMMENDATIONVOTE.getValue())) {
 						RecoIbp recoIbp = null;
 						if (activity.getActivityHolderId() != null)
 							recoIbp = recoService.getRecoVote(activity.getActivityHolderId().toString());
@@ -237,7 +237,7 @@ public class ActivityServiceImpl implements ActivityService {
 						System.out.println("Reco : " + description);
 
 					} else if (observationActivityList.contains(activity.getActivityType())
-							&& activity.getActivityHolderType().equals(ActivityEnums.observation.getValue())) {
+							&& activity.getActivityHolderType().equals(ActivityEnums.OBSERVATION.getValue())) {
 						if (activity.getActivityType().equalsIgnoreCase("Suggestion removed")) {
 							RecoVoteActivity recoVote = new RecoVoteActivity();
 							if (activity.getActivityDescription() != null)
@@ -300,8 +300,13 @@ public class ActivityServiceImpl implements ActivityService {
 
 	}
 
-	List<String> nullSpeciesActivityList = new ArrayList<String>(Arrays.asList("Created species", "Added synonym",
-			"Updated synonym", "Deleted synonym", "Added common name", "Updated common name", "Deleted common name"));
+	List<String> speciesNullActivityList = new ArrayList<String>(Arrays.asList("Created species", "Deleted species"));
+
+	List<String> speciesSynonymActivityList = new ArrayList<String>(
+			Arrays.asList("Added synonym", "Updated synonym", "Deleted synonym"));
+
+	List<String> speciesCommonNameActivityList = new ArrayList<String>(
+			Arrays.asList("Added common name", "Updated common name", "Deleted common name"));
 
 	List<String> speciesActivityList = new ArrayList<String>(
 			Arrays.asList("Featured", "UnFeatured", "Updated species gallery"));
@@ -337,7 +342,7 @@ public class ActivityServiceImpl implements ActivityService {
 			Integer totalActvities = 0;
 
 			while (nextBatch) {
-				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.species.getValue(),
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.SPECIES.getValue(),
 						startPosition);
 				totalActvities += activities.size();
 				if (activities.size() == 50000)
@@ -351,9 +356,9 @@ public class ActivityServiceImpl implements ActivityService {
 
 			startPosition = 0;
 			Integer total = 0;
-//			int count = 0;
+			int count = 0;
 			while (nextBatch) {
-				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.species.getValue(),
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.SPECIES.getValue(),
 						startPosition);
 				total += activities.size();
 				if (activities.size() == 50000)
@@ -384,8 +389,8 @@ public class ActivityServiceImpl implements ActivityService {
 
 							String activityDesc = activity.getActivityDescription();
 							String feature = null;
-							if (!(activityDesc.equalsIgnoreCase("Posted observation to group")
-									|| activityDesc.equals("Removed observation from group")))
+							if (!(activityDesc.equalsIgnoreCase("Posted species to group")
+									|| activityDesc.equals("Removed species from group")))
 								feature = activityDesc;
 							UserGroupActivity ugActivity = new UserGroupActivity(userGroup.getId(), userGroup.getName(),
 									userGroup.getWebAddress(), feature);
@@ -394,7 +399,37 @@ public class ActivityServiceImpl implements ActivityService {
 
 							System.out.println("UserGroup description :" + description);
 						}
+					} else if (activity.getActivityType().equalsIgnoreCase("UnFeatured")
+							|| activity.getActivityType().equalsIgnoreCase("Featured")) {
+
+						String activityDesc = activity.getActivityDescription();
+						String feature = null;
+						if (!(activityDesc.equalsIgnoreCase("Posted species to group")
+								|| activityDesc.equals("Removed species from group")))
+							feature = activityDesc;
+
+						UserGroupActivity ugActivity = new UserGroupActivity(null, portalName, portalWebAddress,
+								feature);
+
+						description = objectMapper.writeValueAsString(ugActivity);
+						System.out.println("species Feature unfeature : " + description);
+					} else if (speciesSynonymActivityList.contains(activity.getActivityType())) {
+						activity.setActivityHolderType(ActivityEnums.TAXONOMYDEFINITION.getValue());
+					} else if (speciesCommonNameActivityList.contains(activity.getActivityType())) {
+						activity.setActivityHolderType(ActivityEnums.COMMONNAMES.getValue());
 					}
+					
+//					update the activity
+
+					activity.setActivityDescription(description);
+					activityDao.update(activity);
+					count++;
+					System.out.println(
+							"Count :" + count + " out of " + totalActvities + "\t Activity Id :" + activity.getId());
+					System.out.println("==========================END========================");
+
+					
+
 				}
 			}
 		} catch (Exception e) {
@@ -439,7 +474,7 @@ public class ActivityServiceImpl implements ActivityService {
 			Integer totalActvities = 0;
 
 			while (nextBatch) {
-				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.document.getValue(),
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.DOCUMENT.getValue(),
 						startPosition);
 				totalActvities += activities.size();
 				if (activities.size() == 50000)
@@ -454,7 +489,7 @@ public class ActivityServiceImpl implements ActivityService {
 			int count = 0;
 
 			while (nextBatch) {
-				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.document.getValue(),
+				List<Activity> activities = activityDao.findAllActivityByPosition(ActivityEnums.DOCUMENT.getValue(),
 						startPosition);
 				total += activities.size();
 				if (activities.size() == 50000)

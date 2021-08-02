@@ -9,10 +9,13 @@ package com.strandls.migration;
  */
 public enum ActivityEnums {
 
-	observation("species.participation.Observation"), recommendationVote("species.participation.RecommendationVote"),
-	userGroup("species.groups.UserGroup"), facts("species.trait.Fact"), comments("species.participation.Comment"),
-	flag("species.participation.Flag"), species("species.Species"), document("content.eml.Document");
-
+	OBSERVATION("species.participation.Observation"), RECOMMENDATIONVOTE("species.participation.RecommendationVote"),
+	USERGROUP("species.groups.UserGroup"), FACTS("species.trait.Fact"), COMMENTS("species.participation.Comment"),
+	FLAG("species.participation.Flag"), USER("species.auth.SUser"), CUSTOMFIELD("CustomField"),
+	FILTERRULE("FilterRule"), DOCUMENT("content.eml.Document"), SPECIES("species.Species"),
+	SPECIESFIELD("species.SpeciesField"), TAXONOMYREGISTRY("species.TaxonomyRegistry"),
+	TAXONOMYDEFINITION("species.TaxonomyDefinition"), COMMONNAMES("species.CommonNames");
+	
 	String value;
 
 	private ActivityEnums(String value) {
