@@ -418,17 +418,16 @@ public class ActivityServiceImpl implements ActivityService {
 					} else if (speciesCommonNameActivityList.contains(activity.getActivityType())) {
 						activity.setActivityHolderType(ActivityEnums.COMMONNAMES.getValue());
 					}
-					
+
 //					update the activity
 
-					activity.setActivityDescription(description);
+					if (!description.isEmpty())
+						activity.setActivityDescription(description);
 					activityDao.update(activity);
 					count++;
 					System.out.println(
 							"Count :" + count + " out of " + totalActvities + "\t Activity Id :" + activity.getId());
 					System.out.println("==========================END========================");
-
-					
 
 				}
 			}
