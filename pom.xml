@@ -10,7 +10,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>biodiv-migration-api</name>
+	<name>biodiv-migration</name>
 	<url>https://github.com/strandls/biodiv-activity</url>
 
 	<properties>
@@ -30,6 +30,11 @@
 		<srcDir>src/main/webapp</srcDir>
 		<base-path>/migration-api/api</base-path>
 		<location>com.strandls.migration</location>
+
+		<!-- Sonar Cloud -->
+		<sonar.projectKey>strandls_biodiv-migration-api</sonar.projectKey>
+		<sonar.organization>strandls</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<distributionManagement>
