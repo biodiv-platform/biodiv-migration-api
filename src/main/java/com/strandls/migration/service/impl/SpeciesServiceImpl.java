@@ -51,7 +51,7 @@ public class SpeciesServiceImpl implements SpeciesService {
 	public void migrateField() {
 
 		try {
-			List<Field> fieldList = fieldDao.findByLanguageId(205L);
+			List<Field> fieldList = fieldDao.findByLanguageId(1L);
 			fieldListSize = Long.parseLong(String.valueOf(fieldList.size()));
 			for (Field field : fieldList) {
 
