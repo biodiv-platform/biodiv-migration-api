@@ -123,24 +123,22 @@ public class DocumentServiceImp implements DocumentService {
 	@Override
 	public void migraetDocumentType() {
 		Map<String, String> typeMapping = new HashMap<String, String>();
-		typeMapping.put("Book","Book");
-		typeMapping.put("Presentation","Miscellaneous");
-		typeMapping.put("Technical_Report","Techreport");
-		typeMapping.put("Miscellaneous","Miscellaneous");
-		typeMapping.put("Report","Techreport");
-		typeMapping.put("Poster","Miscellaneous");
-		typeMapping.put("Journal_Article","Article");
-		typeMapping.put("Proposal","Unpublished");
-		
+		typeMapping.put("Book", "Book");
+		typeMapping.put("Presentation", "Miscellaneous");
+		typeMapping.put("Technical_Report", "Techreport");
+		typeMapping.put("Miscellaneous", "Miscellaneous");
+		typeMapping.put("Report", "Techreport");
+		typeMapping.put("Poster", "Miscellaneous");
+		typeMapping.put("Journal_Article", "Article");
+		typeMapping.put("Proposal", "Unpublished");
+		typeMapping.put("Thesis", "Phdthesis");
+
 		List<Document> documentList = documentDao.findAllDocument();
-		for(Document doc: documentList) {
+		for (Document doc : documentList) {
 			doc.setItemtype(typeMapping.get(doc.getType()));
 			documentDao.update(doc);
 		}
-		
-		
-		
-		
+
 	}
 
 }
