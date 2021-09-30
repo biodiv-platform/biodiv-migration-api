@@ -10,7 +10,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>biodiv-migration-api</name>
+	<name>biodiv-migration</name>
 	<url>https://github.com/strandls/biodiv-activity</url>
 
 	<properties>
@@ -30,6 +30,11 @@
 		<srcDir>src/main/webapp</srcDir>
 		<base-path>/migration-api/api</base-path>
 		<location>com.strandls.migration</location>
+
+		<!-- Sonar Cloud -->
+		<sonar.projectKey>strandls_biodiv-migration-api</sonar.projectKey>
+		<sonar.organization>strandls</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<distributionManagement>
@@ -183,6 +188,33 @@
 			<artifactId>postgresql</artifactId>
 			<version>42.2.9</version>
 		</dependency>
+	
+		<!-- https://mvnrepository.com/artifact/org.postgis/postgis-jdbc -->
+		<dependency>
+			<groupId>org.postgis</groupId>
+			<artifactId>postgis-jdbc</artifactId>
+			<version>1.3.3</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.postgis</groupId>
+					<artifactId>postgis-stubs</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-spatial</artifactId>
+			<version>5.2.12.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.bedatadriven</groupId>
+			<artifactId>jackson-datatype-jts</artifactId>
+			<version>2.4</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>com.strandls.biodiv</groupId>
