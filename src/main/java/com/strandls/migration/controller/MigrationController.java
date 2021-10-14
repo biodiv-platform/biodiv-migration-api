@@ -18,6 +18,8 @@ import com.strandls.migration.ApiConstants;
 import com.strandls.migration.dao.ActivityDao;
 import com.strandls.migration.pojo.Activity;
 import com.strandls.migration.service.CustomFieldService;
+import com.strandls.migration.service.DocumentService;
+import com.strandls.migration.service.SpeciesService;
 import com.strandls.migration.service.impl.DocumentMigrationThread;
 import com.strandls.migration.service.impl.ObservationThread;
 import com.strandls.migration.service.impl.SpeciesMigrateThread;
@@ -50,6 +52,12 @@ public class MigrationController {
 
 	@Inject
 	private CustomFieldService cfService;
+
+	@Inject
+	private DocumentService docService;
+
+	@Inject
+	private SpeciesService speciesService;
 
 	@GET
 	@Path(ApiConstants.PING)
@@ -130,6 +138,46 @@ public class MigrationController {
 			Thread thread = new Thread(documentMigration);
 			thread.start();
 			return Response.status(Status.OK).entity("Migration started").build();
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+	}
+
+	@POST
+	@Path(ApiConstants.MIGRATE + ApiConstants.DOCCOVERAGE)
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public Response migrateDoucmentCoverage() {
+		try {
+			docService.migrateDataDocumentCoverage();
+			return Response.status(Status.OK).entity("Started").build();
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+	}
+
+	@POST
+	@Path(ApiConstants.MIGRATE + ApiConstants.DOCITEMTYPE)
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public Response migrateDocItemType() {
+		try {
+			docService.migraetDocumentType();
+			return Response.status(Status.OK).entity("completed").build();
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+	}
+
+	@GET
+	@Path(ApiConstants.MIGRATEFIELD)
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public Response migratefield() {
+		try {
+			speciesService.migrateField();
+			return Response.status(Status.OK).entity("done").build();
+
 		} catch (Exception e) {
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		}
