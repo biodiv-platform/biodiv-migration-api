@@ -183,4 +183,17 @@ public class MigrationController {
 		}
 	}
 
+	@GET
+	@Path(ApiConstants.MIGRATE + ApiConstants.SF)
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public Response miragteFieldId() {
+		try {
+			speciesService.migrateSpeciesField();
+			return Response.status(Status.OK).entity("done").build();
+		} catch (Exception e) {
+			return Response.status(Status.BAD_GATEWAY).entity(e.getMessage()).build();
+		}
+	}
+
 }

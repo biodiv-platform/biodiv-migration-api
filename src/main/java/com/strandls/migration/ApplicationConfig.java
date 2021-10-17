@@ -134,14 +134,17 @@ public class ApplicationConfig extends Application {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		for (String className : classNames) {
 			// logger.info(className);
-			Class<?> cls = Class.forName(className);
-			Annotation[] annotations = cls.getAnnotations();
+			if (!className.endsWith(".")) {
+				Class<?> cls = Class.forName(className);
+				Annotation[] annotations = cls.getAnnotations();
 
-			for (Annotation annotation : annotations) {
-				if (annotation instanceof Api || annotation instanceof ApiModel) {
-					classes.add(cls);
+				for (Annotation annotation : annotations) {
+					if (annotation instanceof Api || annotation instanceof ApiModel) {
+						classes.add(cls);
+					}
 				}
 			}
+
 		}
 
 		return classes;

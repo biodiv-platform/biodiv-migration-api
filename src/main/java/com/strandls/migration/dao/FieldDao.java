@@ -68,7 +68,7 @@ public class FieldDao extends AbstractDAO<Field, Long> {
 	@SuppressWarnings("unchecked")
 	public List<Field> findByLanguageId(Long languageId) {
 		List<Field> result = null;
-		String qry = "from  Field where languageId = :languageId order by displayOrder";
+		String qry = "from Field where languageId = :languageId order by displayOrder";
 		Session session = sessionFactory.openSession();
 		try {
 			Query<Field> query = session.createQuery(qry);

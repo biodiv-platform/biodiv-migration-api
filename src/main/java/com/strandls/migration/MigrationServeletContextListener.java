@@ -82,7 +82,7 @@ public class MigrationServeletContextListener extends GuiceServletContextListene
 
 				GeometryFactory geofactory = new GeometryFactory(new PrecisionModel(), 4326);
 				bind(GeometryFactory.class).toInstance(geofactory);
-				
+
 				ObjectMapper om = new ObjectMapper();
 				bind(ObjectMapper.class).toInstance(om);
 
@@ -93,7 +93,7 @@ public class MigrationServeletContextListener extends GuiceServletContextListene
 				bind(UserServiceApi.class).in(Scopes.SINGLETON);
 				bind(RecommendationServicesApi.class).in(Scopes.SINGLETON);
 				bind(ObservationServiceApi.class).in(Scopes.SINGLETON);
-				
+
 				bind(ServletContainer.class).in(Scopes.SINGLETON);
 				serve("/api/*").with(ServletContainer.class, props);
 			}
@@ -109,15 +109,18 @@ public class MigrationServeletContextListener extends GuiceServletContextListene
 		List<String> classNames = getClassNamesFromPackage(packageName);
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		for (String className : classNames) {
-			Class<?> cls = Class.forName(className);
-			Annotation[] annotations = cls.getAnnotations();
+			if (!className.endsWith(".")) {
+				Class<?> cls = Class.forName(className);
+				Annotation[] annotations = cls.getAnnotations();
 
-			for (Annotation annotation : annotations) {
-				if (annotation instanceof javax.persistence.Entity) {
-					System.out.println("Mapping entity :" + cls.getCanonicalName());
-					classes.add(cls);
+				for (Annotation annotation : annotations) {
+					if (annotation instanceof javax.persistence.Entity) {
+						System.out.println("Mapping entity :" + cls.getCanonicalName());
+						classes.add(cls);
+					}
 				}
 			}
+
 		}
 
 		return classes;
@@ -141,7 +144,6 @@ public class MigrationServeletContextListener extends GuiceServletContextListene
 				names.add(name);
 			}
 		});
-
 		return names;
 	}
 
