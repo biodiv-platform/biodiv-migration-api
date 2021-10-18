@@ -131,6 +131,7 @@ public class DocumentServiceImp implements DocumentService {
 		typeMapping.put("Poster","Miscellaneous");
 		typeMapping.put("Journal_Article","Article");
 		typeMapping.put("Proposal","Unpublished");
+		typeMapping.put("Thesis", "Phdthesis");
 		
 		List<Document> documentList = documentDao.findAllDocument();
 		for(Document doc: documentList) {
