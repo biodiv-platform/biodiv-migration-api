@@ -6,6 +6,7 @@ package com.strandls.migration.pojo;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  * @author Abhishek Rudra
@@ -22,6 +23,7 @@ public class RatingLink {
 	private Long ratingRef;
 	private String type;
 
+	@Id
 	@Column(name = "id")
 	public Long getId() {
 		return id;
