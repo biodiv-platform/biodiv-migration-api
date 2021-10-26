@@ -183,4 +183,31 @@ public class MigrationController {
 		}
 	}
 
+	@GET
+	@Path(ApiConstants.MIGRATE + ApiConstants.RATING)
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public Response migrateResourceRating() {
+		try {
+			speciesService.resourceRatingMigration();
+			return Response.status(Status.OK).entity("DOne").build();
+
+		} catch (Exception e) {
+			return Response.status(Status.BAD_GATEWAY).entity(e.getMessage()).build();
+		}
+	}
+
+	@GET
+	@Path(ApiConstants.MIGRATE + ApiConstants.CONTRIBUTOR)
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public Response migrateResourceContrbutor() {
+		try {
+			speciesService.resourceContributorMigration();
+			return Response.status(Status.OK).entity("done").build();
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+	}
+
 }

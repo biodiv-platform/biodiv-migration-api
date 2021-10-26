@@ -12,4 +12,7 @@ public interface SpeciesService {
 
 	public void migrateField();
 
+	public void resourceRatingMigration();
+
+	public void resourceContributorMigration();
 }
