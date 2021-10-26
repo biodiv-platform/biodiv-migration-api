@@ -5,6 +5,7 @@ package com.strandls.migration.pojo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -20,6 +21,7 @@ public class Rating {
 	private Long id;
 	private Long star;
 
+	@Id
 	@Column(name = "id")
 	public Long getId() {
 		return id;

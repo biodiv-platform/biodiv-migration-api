@@ -5,6 +5,7 @@ package com.strandls.migration.pojo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -20,6 +21,7 @@ public class ResourceContributor {
 	private Long resourceId;
 	private Long contributorId;
 
+	@Id
 	@Column(name = "resource_attributors_id")
 	public Long getResourceId() {
 		return resourceId;
