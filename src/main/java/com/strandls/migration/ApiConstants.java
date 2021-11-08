@@ -27,4 +27,6 @@ public class ApiConstants {
 	public static final String DOCCOVERAGE = "/docCoverage";
 	public static final String DOCITEMTYPE = "/docItemType";
 	public static final String MIGRATEFIELD = "/migrateField";
+	public static final String RATING = "/rating";
+	public static final String CONTRIBUTOR = "/contributor";
 }

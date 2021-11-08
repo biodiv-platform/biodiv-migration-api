@@ -12,12 +12,22 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.strandls.migration.dao.ContributorDao;
 import com.strandls.migration.dao.FieldDao;
 import com.strandls.migration.dao.FieldHeaderDao;
 import com.strandls.migration.dao.FieldNewDao;
+import com.strandls.migration.dao.RatingDao;
+import com.strandls.migration.dao.RatingLinkDao;
+import com.strandls.migration.dao.ResourceContributorDao;
+import com.strandls.migration.dao.ResourceDao;
+import com.strandls.migration.pojo.Contributor;
 import com.strandls.migration.pojo.Field;
 import com.strandls.migration.pojo.FieldHeader;
 import com.strandls.migration.pojo.FieldNew;
+import com.strandls.migration.pojo.Rating;
+import com.strandls.migration.pojo.RatingLink;
+import com.strandls.migration.pojo.Resource;
+import com.strandls.migration.pojo.ResourceContributor;
 import com.strandls.migration.service.SpeciesService;
 
 /**
@@ -37,6 +47,21 @@ public class SpeciesServiceImpl implements SpeciesService {
 
 	@Inject
 	private FieldHeaderDao fieldHeaderDao;
+
+	@Inject
+	private ResourceDao resourceDao;
+
+	@Inject
+	private RatingDao ratingDao;
+
+	@Inject
+	private RatingLinkDao ratingLinkDao;
+
+	@Inject
+	private ContributorDao contributorDao;
+
+	@Inject
+	private ResourceContributorDao rcDao;
 
 //	migration of field to new structure
 
@@ -179,6 +204,37 @@ public class SpeciesServiceImpl implements SpeciesService {
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+		}
+
+	}
+
+	@Override
+	public void resourceRatingMigration() {
+		List<RatingLink> resourceRatingLink = ratingLinkDao.getAllResourceRating();
+		for (RatingLink ratingLink : resourceRatingLink) {
+			Rating rating = ratingDao.findById(ratingLink.getRatingId());
+			Resource resource = resourceDao.findById(ratingLink.getRatingRef());
+			if (rating != null && resource != null) {
+				if (rating.getStar() != Long.parseLong(resource.getRating().toString())) {
+					resource.setRating(Integer.parseInt(rating.getStar().toString()));
+					resourceDao.update(resource);
+				}
+			}
+
+		}
+
+	}
+
+	@Override
+	public void resourceContributorMigration() {
+		List<ResourceContributor> resourceContributorList = rcDao.findAll();
+		for (ResourceContributor rc : resourceContributorList) {
+			Contributor contributor = contributorDao.findById(rc.getContributorId());
+			Resource resource = resourceDao.findById(rc.getResourceId());
+			if (contributor != null && resource != null) {
+				resource.setContributor(contributor.getName());
+				resourceDao.update(resource);
+			}
 		}
 
 	}
