@@ -37,7 +37,7 @@ public class ResourceContributorDao extends AbstractDAO<ResourceContributor, Lon
 
 	@SuppressWarnings("unchecked")
 	public List<ResourceContributor> findAllResource() {
-		String qry = "from resource_contributor";
+		String qry = "from ResourceContributor";
 		Session session = sessionFactory.openSession();
 		List<ResourceContributor> result = null;
 		try {
