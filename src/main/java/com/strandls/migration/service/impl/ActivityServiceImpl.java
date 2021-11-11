@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.strandls.migration.ActivityEnums;
 import com.strandls.migration.dao.ActivityDao;
 import com.strandls.migration.pojo.Activity;
-import com.strandls.migration.pojo.MyJson;
 import com.strandls.migration.pojo.RecoVoteActivity;
 import com.strandls.migration.pojo.UserGroupActivity;
 import com.strandls.migration.service.ActivityService;
@@ -168,7 +167,7 @@ public class ActivityServiceImpl implements ActivityService {
 
 						FlagIbp flag = utilityService.getFlagsIbp(activity.getActivityHolderId().toString());
 						if (flag == null) {
-							description = activity.getDescriptionJson().getDescription();
+//							description = activity.getDescriptionJson().getDescription();
 							String[] desc = description.split("\n");
 							flag = new FlagIbp();
 							flag.setFlag(desc[0]);
@@ -205,13 +204,13 @@ public class ActivityServiceImpl implements ActivityService {
 						if (activity.getActivityDescription() != null)
 							recoVote = extractName(activity.getActivityDescription());
 						if (recoVote.getGivenName() == null) {
-							MyJson jsonData = activity.getDescriptionJson();
-							if (jsonData != null) {
-								if (jsonData.getName() != null)
-									recoVote.setGivenName(jsonData.getName());
-								if (jsonData.getRo_id() != null)
-									recoVote.setSpeciesId(jsonData.getRo_id());
-							}
+//							MyJson jsonData = activity.getDescriptionJson();
+//							if (jsonData != null) {
+//								if (jsonData.getName() != null)
+//									recoVote.setGivenName(jsonData.getName());
+//								if (jsonData.getRo_id() != null)
+//									recoVote.setSpeciesId(jsonData.getRo_id());
+//							}
 
 						}
 
@@ -243,13 +242,13 @@ public class ActivityServiceImpl implements ActivityService {
 							if (activity.getActivityDescription() != null)
 								recoVote = extractName(activity.getActivityDescription());
 							if (recoVote.getGivenName() == null) {
-								MyJson jsonData = activity.getDescriptionJson();
-								if (jsonData != null) {
-									if (jsonData.getName() != null)
-										recoVote.setGivenName(jsonData.getName());
-									if (jsonData.getRo_id() != null)
-										recoVote.setSpeciesId(jsonData.getRo_id());
-								}
+//								MyJson jsonData = activity.getDescriptionJson();
+//								if (jsonData != null) {
+//									if (jsonData.getName() != null)
+//										recoVote.setGivenName(jsonData.getName());
+//									if (jsonData.getRo_id() != null)
+//										recoVote.setSpeciesId(jsonData.getRo_id());
+//								}
 
 							}
 
@@ -274,11 +273,11 @@ public class ActivityServiceImpl implements ActivityService {
 							description = objectMapper.writeValueAsString(ugActivity);
 							System.out.println("observation Feature unfeature : " + description);
 						} else if (activity.getActivityType().equalsIgnoreCase("Custom field edited")) {
-							MyJson jsonData = activity.getDescriptionJson();
-							if (jsonData != null) {
-								description = jsonData.getDescription();
-								System.out.println("observation costum Field updated : " + description);
-							}
+//							MyJson jsonData = activity.getDescriptionJson();
+//							if (jsonData != null) {
+//								description = jsonData.getDescription();
+//								System.out.println("observation costum Field updated : " + description);
+//							}
 						}
 
 					}
@@ -514,7 +513,7 @@ public class ActivityServiceImpl implements ActivityService {
 
 						FlagIbp flag = utilityService.getFlagsIbp(activity.getActivityHolderId().toString());
 						if (flag == null) {
-							description = activity.getDescriptionJson().getDescription();
+//							description = activity.getDescriptionJson().getDescription();
 							String[] desc = description.split("\n");
 							flag = new FlagIbp();
 							flag.setFlag(desc[0]);
