@@ -244,6 +244,7 @@ public class SpeciesServiceImpl implements SpeciesService {
 					resourceDao.update(resource);
 					System.out.println(counter + "  : out of :  " + total);
 					System.out.println("----------------------------------------");
+					counter++;
 				}
 			}
 
