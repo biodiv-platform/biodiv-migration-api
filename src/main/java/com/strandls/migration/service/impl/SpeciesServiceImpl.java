@@ -230,7 +230,8 @@ public class SpeciesServiceImpl implements SpeciesService {
 		List<ResourceContributor> resourceContributorList = rcDao.findAll();
 		for (ResourceContributor rc : resourceContributorList) {
 			Contributor contributor = contributorDao.findById(rc.getContributorId());
-			Resource resource = resourceDao.findById(rc.getResourceId());
+			Resource resource = resourceDao.findById(rc.getResourceAttributorId() != null ? rc.getResourceAttributorId()
+					: rc.getResourceContributorId());
 			if (contributor != null && resource != null) {
 				resource.setContributor(contributor.getName());
 				resourceDao.update(resource);
