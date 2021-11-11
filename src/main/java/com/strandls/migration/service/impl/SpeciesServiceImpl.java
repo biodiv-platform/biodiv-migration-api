@@ -229,7 +229,7 @@ public class SpeciesServiceImpl implements SpeciesService {
 	public void resourceContributorMigration() {
 		try {
 
-			List<ResourceContributor> resourceContributorList = rcDao.findAll();
+			List<ResourceContributor> resourceContributorList = rcDao.findAllResource();
 			int total = resourceContributorList.size();
 			int counter = 1;
 			for (ResourceContributor rc : resourceContributorList) {
