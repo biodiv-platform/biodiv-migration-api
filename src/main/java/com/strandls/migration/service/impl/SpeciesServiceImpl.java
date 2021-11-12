@@ -227,18 +227,34 @@ public class SpeciesServiceImpl implements SpeciesService {
 
 	@Override
 	public void resourceContributorMigration() {
-		List<ResourceContributor> resourceContributorList = rcDao.findAll();
-		for (ResourceContributor rc : resourceContributorList) {
-			Contributor contributor = contributorDao.findById(rc.getContributorId());
-			Resource resource = resourceDao
-					.findById(rc.getResourceContributorId() != null ? rc.getResourceContributorId()
-							: rc.getResourceAttributorId());
-			if (contributor != null && resource != null) {
-				resource.setContributor(contributor.getName());
-				resourceDao.update(resource);
-			}
-		}
+		try {
 
+			List<ResourceContributor> resourceContributorList = rcDao.findAllResource();
+			int total = resourceContributorList.size();
+			int counter = 1;
+			for (ResourceContributor rc : resourceContributorList) {
+
+				Contributor contributor = contributorDao.findById(rc.getContributorId());
+				Resource resource = resourceDao
+						.findById(rc.getResourceContributorId() != null ? rc.getResourceContributorId()
+								: rc.getResourceAttributorId());
+
+				if (contributor != null && resource != null) {
+					System.out.println("Contributor id : " + contributor.getId());
+					System.out.println(" resource id : " + resource.getId());
+					resource.setContributor(contributor.getName());
+					resourceDao.update(resource);
+
+				}
+				System.out.println(counter + "  : out of :  " + total);
+				System.out.println("----------------------------------------");
+				counter++;
+
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 }
