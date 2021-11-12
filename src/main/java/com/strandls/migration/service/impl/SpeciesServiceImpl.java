@@ -12,13 +12,23 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.strandls.migration.dao.ContributorDao;
 import com.strandls.migration.dao.FieldDao;
 import com.strandls.migration.dao.FieldHeaderDao;
 import com.strandls.migration.dao.FieldNewDao;
+import com.strandls.migration.dao.RatingDao;
+import com.strandls.migration.dao.RatingLinkDao;
+import com.strandls.migration.dao.ResourceContributorDao;
+import com.strandls.migration.dao.ResourceDao;
 import com.strandls.migration.dao.SpeciesFieldDao;
+import com.strandls.migration.pojo.Contributor;
 import com.strandls.migration.pojo.Field;
 import com.strandls.migration.pojo.FieldHeader;
 import com.strandls.migration.pojo.FieldNew;
+import com.strandls.migration.pojo.Rating;
+import com.strandls.migration.pojo.RatingLink;
+import com.strandls.migration.pojo.Resource;
+import com.strandls.migration.pojo.ResourceContributor;
 import com.strandls.migration.pojo.SpeciesField;
 import com.strandls.migration.service.SpeciesService;
 
@@ -42,6 +52,21 @@ public class SpeciesServiceImpl implements SpeciesService {
 
 	@Inject
 	private SpeciesFieldDao sfDao;
+
+	@Inject
+	private ResourceDao resourceDao;
+
+	@Inject
+	private RatingDao ratingDao;
+
+	@Inject
+	private RatingLinkDao ratingLinkDao;
+
+	@Inject
+	private ContributorDao contributorDao;
+
+	@Inject
+	private ResourceContributorDao rcDao;
 
 //	migration of field to new structure
 
@@ -216,6 +241,53 @@ public class SpeciesServiceImpl implements SpeciesService {
 
 	}
 
-	
-	
+	@Override
+	public void resourceRatingMigration() {
+		List<RatingLink> resourceRatingLink = ratingLinkDao.getAllResourceRating();
+		for (RatingLink ratingLink : resourceRatingLink) {
+			Rating rating = ratingDao.findById(ratingLink.getRatingId());
+			Resource resource = resourceDao.findById(ratingLink.getRatingRef());
+			if (rating != null && resource != null) {
+				if (rating.getStar() != Long.parseLong(resource.getRating().toString())) {
+					resource.setRating(Integer.parseInt(rating.getStar().toString()));
+					resourceDao.update(resource);
+				}
+			}
+
+		}
+
+	}
+
+	@Override
+	public void resourceContributorMigration() {
+		try {
+
+			List<ResourceContributor> resourceContributorList = rcDao.findAllResource();
+			int total = resourceContributorList.size();
+			int counter = 1;
+			for (ResourceContributor rc : resourceContributorList) {
+
+				Contributor contributor = contributorDao.findById(rc.getContributorId());
+				Resource resource = resourceDao
+						.findById(rc.getResourceContributorId() != null ? rc.getResourceContributorId()
+								: rc.getResourceAttributorId());
+
+				if (contributor != null && resource != null) {
+					System.out.println("Contributor id : " + contributor.getId());
+					System.out.println(" resource id : " + resource.getId());
+					resource.setContributor(contributor.getName());
+					resourceDao.update(resource);
+
+				}
+				System.out.println(counter + "  : out of :  " + total);
+				System.out.println("----------------------------------------");
+				counter++;
+
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
 }

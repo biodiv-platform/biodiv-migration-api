@@ -27,5 +27,7 @@ public class MigrationDaoModule extends AbstractModule {
 		bind(FieldHeaderDao.class).in(Scopes.SINGLETON);
 		bind(FieldNewDao.class).in(Scopes.SINGLETON);
 		bind(SpeciesFieldDao.class).in(Scopes.SINGLETON);
+		bind(RatingDao.class).in(Scopes.SINGLETON);
+		bind(RatingLinkDao.class).in(Scopes.SINGLETON);
 	}
 }
