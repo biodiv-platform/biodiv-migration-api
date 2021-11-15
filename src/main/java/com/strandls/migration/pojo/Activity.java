@@ -22,7 +22,6 @@ import io.swagger.annotations.ApiModel;
  * @author Abhishek Rudra
  *
  */
-@org.hibernate.annotations.TypeDef(name = "MyJsonType", typeClass = MyJsonType.class)
 @Entity
 @Table(name = "activity_feed")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -49,7 +48,6 @@ public class Activity implements Serializable {
 	private Long subRootHolderId;
 	private String subRootHolderType;
 	private Boolean isShowable;
-	private MyJson descriptionJson;
 
 	/**
 	 * 
@@ -79,7 +77,7 @@ public class Activity implements Serializable {
 	public Activity(Long id, Long version, String activityDescription, Long activityHolderId, String activityHolderType,
 			String activityRootType, String activityType, Long authorId, Date dateCreated, Date lastUpdated,
 			Long rootHolderId, String rootHolderType, Long subRootHolderId, String subRootHolderType,
-			Boolean isShowable, MyJson descriptionJson) {
+			Boolean isShowable) {
 		super();
 		this.id = id;
 		this.version = version;
@@ -96,7 +94,6 @@ public class Activity implements Serializable {
 		this.subRootHolderId = subRootHolderId;
 		this.subRootHolderType = subRootHolderType;
 		this.isShowable = isShowable;
-		this.descriptionJson = descriptionJson;
 	}
 
 	@Id
@@ -236,13 +233,4 @@ public class Activity implements Serializable {
 		this.isShowable = isShowable;
 	}
 
-	@Column(name = "description_json")
-	@Type(type = "MyJsonType")
-	public MyJson getDescriptionJson() {
-		return descriptionJson;
-	}
-
-	public void setDescriptionJson(MyJson descriptionJson) {
-		this.descriptionJson = descriptionJson;
-	}
 }
